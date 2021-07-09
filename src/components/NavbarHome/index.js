@@ -1,89 +1,55 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-
-export default class NavbarHome extends Component {
-  render() {
-    return (
-      <nav className="navbar navbar-expand-md bg-dark navbar-dark">
-        {/* Brand */}
-        <a className="navbar-brand" href="#a">
-          Navbar
-        </a>
-        {/* Toggler/collapsibe Button */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#collapsibleNavbar"
-        >
-          <span className="navbar-toggler-icon" />
-        </button>
-        {/* Navbar links */}
-        <div className="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <NavLink
-                exact
-                activeClassName="active"
-                className="nav-link"
-                to="/"
-              >
-                Home
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                activeClassName="active"
-                className="nav-link"
-                to="/about"
-              >
-                About
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                activeClassName="active"
-                className="nav-link"
-                to="/list-movie"
-              >
-                List Movie
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink activeClassName="active" className="nav-link" to="/hoc">
-                HOC
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                activeClassName="active"
-                className="nav-link"
-                to="/hooks"
-              >
-                Hooks
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                activeClassName="active"
-                className="nav-link"
-                to="/material-page"
-              >
-                Material
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink
-                activeClassName="active"
-                className="nav-link"
-                to="/styled-page"
-              >
-                StyledComponent
-              </NavLink>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    );
-  }
+import { Container, Grid } from "@material-ui/core";
+import React from "react";
+import { useParams } from "react-router";
+import { NavLink, Link } from "react-router-dom";
+import BtnLanguages from "../BtnsLanguages/BtnsLanguages";
+import styleSCSS from "./NavbarHome.module.scss";
+function NavbarHome() {
+  const { lang } = useParams();
+  const menus = [
+    { title: "home", url: `/${lang}/home` },
+    { title: "movie", url: `/${lang}/home/#movie` },
+    { title: "cinema", url: `/${lang}/home/#cinema` },
+    { title: "app", url: `/${lang}/home/#app` },
+  ];
+  return (
+    <div className={styleSCSS.navbar_home}>
+      <div className={styleSCSS.Container_root}>
+        <Grid container>
+          <Grid item xs={2} className={styleSCSS.box_logo}>
+            <Link className="text-decoration-none" to="/">
+              <img src="/images/apollo-logo.png" alt="logo-web" />
+              <span>ollo</span>
+            </Link>
+          </Grid>
+          <Grid item xs={7} className={styleSCSS.box_menu}>
+            {menus
+              ? menus.map((item, index) => (
+                  <Link key={index} to={item.url} className={styleSCSS.txt_tit}>
+                    {item.title}
+                  </Link>
+                ))
+              : null}
+          </Grid>
+          <Grid item xs={3}>
+            <NavLink
+              className={`${styleSCSS.btn_register} ${styleSCSS.button} "text-decoration-none"`}
+              to="/sign-up"
+            >
+              Register
+            </NavLink>
+            <NavLink
+              className={`${styleSCSS.btn_login} ${styleSCSS.button} "text-decoration-none"`}
+              to="/sign-in"
+            >
+              Login
+            </NavLink>
+            <BtnLanguages />
+          </Grid>
+        </Grid>
+      </div>
+    </div>
+  );
 }
+
+export default NavbarHome;

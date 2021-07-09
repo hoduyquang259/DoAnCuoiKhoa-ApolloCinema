@@ -1,0 +1,89 @@
+.navbar_home {
+  background-color: var(--body-bg);
+  height: 70px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.Container_root {
+  height: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+}
+
+.box_logo {
+  margin: auto;
+}
+.box_logo img {
+  width: 50px;
+}
+.box_logo span {
+  font-size: 25px;
+  color: var(--txt-color);
+}
+
+.box_menu {
+  text-align: center;
+  margin: auto;
+  text-decoration: none;
+}
+.box_menu a {
+  margin: 0px 20px;
+  color: var(--txt-color);
+  text-transform: uppercase;
+  font-size: 18px;
+  font-weight: 500;
+}
+.box_menu a:hover {
+  color: var(--txt-color);
+  text-decoration: none;
+  border-bottom: 2px solid var(--btn-bg);
+}
+
+.button {
+  text-transform: capitalize;
+  text-decoration: none;
+  border: 2px solid;
+  border-radius: 5px;
+  width: 100px;
+  height: 40px;
+  padding: 10px;
+}
+.btn_register {
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border-color);
+  color: var(--txt-color);
+  font-size: 16px;
+  margin-right: 10px;
+}
+.btn_register:hover {
+  color: var(--btn-bg);
+  text-decoration: none;
+  background-color: var(--btn-color);
+}
+.btn_login {
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border-color);
+  color: var(--txt-color);
+  font-size: 16px;
+}
+.btn_login:hover {
+  color: var(--btn-bg);
+  text-decoration: none;
+  background-color: var(--btn-color);
+}
+.btn_lang {
+  width: 150px;
+  background-color: transparent;
+  border-color: var(--txt-color);
+  color: var(--txt-color);
+  font-size: 16px;
+}
+
+.txt_tit {
+  font-size: 16px;
+}

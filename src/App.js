@@ -1,13 +1,10 @@
-// import HomePage from "./containers/HomeTemplate/HomePage";
-// import AboutPage from "./containers/HomeTemplate/AboutPage";
-// import ListMovie from "./containers/HomeTemplate/ListMoviePage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import PageNotFound from "./containers/PageNotFound";
 import { routesHome, routesAdmin } from "./routes";
 import HomeTemplate from "./containers/HomeTemplate";
 import AdminTemplate from "./containers/AdminTemplate";
 import AuthPage from "./containers/AdminTemplate/AuthPage";
-
+import "./scss/Style.scss";
+import PageNotFound from "components/PageNotFound";
 function App() {
   const renderRoutesHome = (routes) => {
     if (routes && routes.length > 0) {
@@ -17,7 +14,7 @@ function App() {
             key={index}
             exact={item.exact}
             path={item.path}
-            Component={item.component}
+            component={item.component}
           />
         );
       });
@@ -44,15 +41,6 @@ function App() {
       <Switch>
         {renderRoutesHome(routesHome)}
         {renderRoutesAdmin(routesAdmin)}
-        {/* Trang chủ - localhost:3000 */}
-        {/* <Route exact path="/" component={HomePage} /> */}
-
-        {/* Trang about - localhost:3000/about */}
-        {/* <Route path="/about" component={AboutPage} /> */}
-
-        {/* Trang list movie - localhost:3000/list-movie */}
-        {/* <Route path="/list-movie" component={ListMovie} /> */}
-
         <Route path="/auth" component={AuthPage} />
         {/* Trang PageNotFound */}
         <Route path="" component={PageNotFound} />

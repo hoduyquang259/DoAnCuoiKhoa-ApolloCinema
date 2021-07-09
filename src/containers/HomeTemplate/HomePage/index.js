@@ -1,11 +1,14 @@
-import React, { Component } from "react";
-
-export default class HomePage extends Component {
-  render() {
-    return (
-      <div>
-        <h1>HomePage</h1>
-      </div>
-    );
-  }
+import React from "react";
+import Carousel from "./Carousel";
+import "./HomePage.scss";
+import Movie from "./Movie";
+import App from "./App";
+export default function HomePage() {
+  return (
+    <div className="home-page">
+      <Carousel />
+      <Movie />
+      <App />
+    </div>
+  );
 }
