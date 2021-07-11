@@ -1,6 +1,5 @@
 import React from "react";
 import { Route } from "react-router-dom";
-import Loader from "../../components/Loader";
 import NavbarHome from "../../components/HomeComp/NavbarHome";
 
 const LayoutHomeTemplate = (props) => {
