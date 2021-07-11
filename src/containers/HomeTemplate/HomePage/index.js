@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Header from "../../../components/HomeComp/Header";
 import Movie from "../../../components/HomeComp/Movie/Movie";
 import movieApi from "../../../api/MovieApi";

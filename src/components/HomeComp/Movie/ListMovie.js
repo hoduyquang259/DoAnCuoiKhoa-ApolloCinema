@@ -6,7 +6,7 @@ const ListMovie = ({ value, index }) => {
   return (
     <div>
       <div
-        role="listmovie"
+        role={"listmovie"}
         hidden={value !== index}
         id={`simple-listmovie-${index}`}
         aria-labelledby={`simple-movie-${index}`}
