@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 10px;
+}
+body {
+  font-family: "Montserrat", sans-serif;
+  a {
+    text-decoration: none;
+  }
+  li {
+    list-style-type: none;
+  }
+  //loader
+  @import "../components/Loader/style.scss";
+  //register form
+  @import "../components/Register/style.scss";
+  //auth page
+  @import "../containers/Auth/style.scss";
+  //page not found
+  @import "./page-not-found.scss";
+  //home template style
+  @import "./home-style.scss";
+  //admin template style
+  @import "./admin-style.scss";
+}
