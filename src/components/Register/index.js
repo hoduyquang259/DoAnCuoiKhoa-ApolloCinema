@@ -3,8 +3,8 @@ import React from "react";
 import RegisterForm from "./RegisterForm";
 
 const Register = () => {
-  const handleSubmit = (values) => {
-    console.log("Form Submit:", values);
+  const handleSubmit = async (values) => {
+    console.log("Form Register:", values);
   };
   return (
     <div className="register">
