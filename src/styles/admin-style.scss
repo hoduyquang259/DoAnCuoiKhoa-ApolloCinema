@@ -1,0 +1,25 @@
+//navbarAdmin
+@import "../components/AdminComp/NavbarAdmin/style.scss";
+
+//AdminComp/DasboardPage
+@import "../components/AdminComp/DashboardPage/style.scss";
+//User Statistics
+@import "../components/AdminComp/DashboardPage/UserStatistics/style.scss";
+//Movie Statistics
+@import "../components/AdminComp/DashboardPage/MovieStatistics/style.scss";
+//Revenue Statistics
+@import "../components/AdminComp/DashboardPage/RevenueStatistics/style.scss";
+//Booking History Statistics
+@import "../components/AdminComp/DashboardPage/BookingHistory/style.scss";
+//The Most Booked Movies
+@import "../components/AdminComp/DashboardPage/TheMostBookedMovies/style.scss";
+
+//AdminComp
+//User Management
+@import "../components/AdminComp/UserManagement/style.scss";
+//Movie Management
+@import "../components/AdminComp/MovieManagement/style.scss";
+//Ticket Management
+@import "../components/AdminComp/TicketManagement/style.scss";
+//Cineplex Management
+@import "../components/AdminComp/CineplextManagement/style.scss";
