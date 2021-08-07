@@ -2,6 +2,11 @@ import React, {useState,useEffect} from "react"
 import {DataGrid} from "@material-ui/data-grid"
 import MaterialTable from 'material-table'
 
+//Lấy tài khoản User từ LocalStorage
+// let dataLocalStorage = JSON.parse(localStorage.getItem("UserAdmin"));
+// console.log(dataLocalStorage.accessToken);
+
+
 const rows = [
     { id: 1,  taiKhoan: 'Snow', hoTen: 'Jon', email: "email@gmail.com", soDt: "0938126954", matKhau: "123456", maLoaiNguoiDung: "ADMIN" },
     { id: 2,  taiKhoan: 'Lannister', hoTen: 'Cersei', email: "email@gmail.com", soDt: "0938126954", matKhau: "123456", maLoaiNguoiDung: "CLIENT" },
@@ -70,3 +75,5 @@ const TicketManagementPage =() =>{
     </div>);
 }
 export default TicketManagementPage;
+
+

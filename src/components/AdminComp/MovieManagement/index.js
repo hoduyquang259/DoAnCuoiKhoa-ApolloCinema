@@ -1,218 +1,381 @@
-import React, { useState, useEffect } from 'react';
-import { forwardRef } from 'react';
-import Avatar from 'react-avatar';
-import Grid from '@material-ui/core/Grid'
+import React, { useEffect, useState } from "react";
+import AddBoxIcon from "@material-ui/icons/AddBox";
+import axios from "axios";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { getAccessToken } from "../../../services/admin-services";
+const MovieManagement = () => {
+  const accessToken = getAccessToken();
+  // const api = createAPI(accessToken);
+  const newData = [
+    {
+      maPhim: "",
+      tenPhim: "",
+      biDanh: "",
+      hinhAnh: {},
+      trailer: "",
+      moTa: "",
+      maNhom: "",
+      ngayKhoiChieu: "",
+      danhGia: "",
+    },
+  ];
+  const [state, setState] = useState({
+    hinhAnh: {},
+    maPhim: "",
+    tenPhim: "",
+    trailer: "",
+    moTa: "",
+    maNhom: "",
+  });
 
-import MaterialTable from "material-table";
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import axios from 'axios'
-import Alert from '@material-ui/lab/Alert';
+  const [submitted, setSubmitted] = useState(false);
+  const [valid, setValid] = useState(false);
 
-const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-};
+  const [data, setData] = useState(newData);
 
-const api = axios.create({
-  baseURL: `https://movie0706.cybersoft.edu.vn/api/QuanLyPhim`
-})
-
-
-function validateEmail(email){
-  const re = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
-  return re.test(String(email).toLowerCase());
-}
-
-function MovieManagement() {
-
-  var columns = [
-    {title: "id", field: "id", hidden: true},
-    {title: "Avatar", render: rowData => <Avatar inisize="100" round={true} facebook-id="invalidfacebookusername" src="http://www.gravatar.com/avatar/a16a38cdfe8b2cbd38e8a56ab93238d3"/>  },
-    {title: "First name", field: "first_name"},
-    {title: "Last name", field: "last_name"},
-    {title: "email", field: "email"}
-  ]
-  const [data, setData] = useState([]); //table data
-
-  //for error handling
-  const [iserror, setIserror] = useState(false)
-  const [errorMessages, setErrorMessages] = useState([])
-
-  useEffect(() => { 
-    api.get("/LayDanhSachPhim?maNhom=GP08")
-        .then(res => {               
-            setData(res.data.data);
-            console.log(res.data);
-         })
-         .catch(error=>{
-             console.log("Error")
-         })
-  }, [])
-
-  const handleRowUpdate = (newData, oldData, resolve) => {
-    //validation
-    let errorList = []
-    if(newData.first_name === ""){
-      errorList.push("Please enter first name")
-    }
-    if(newData.last_name === ""){
-      errorList.push("Please enter last name")
-    }
-    if(newData.email === "" || validateEmail(newData.email) === false){
-      errorList.push("Please enter a valid email")
-    }
-
-    if(errorList.length < 1){
-      api.patch("/users?page=2/"+newData.id, newData)
-      .then(res => {
-        const dataUpdate = [...data];
-        const index = oldData.tableData.id;
-        dataUpdate[index] = newData;
-        setData([...dataUpdate]);
-        resolve()
-        setIserror(false)
-        setErrorMessages([])
+  const fetchMovieList = () => {
+    axios({
+      url: "https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/LayDanhSachPhim?maNhom=GP08",
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => {
+        setData(response.data);
       })
-      .catch(error => {
-        setErrorMessages(["Update failed! Server error"])
-        setIserror(true)
-        resolve()
-        
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchMovieList();
+  }, []);
+
+  //ADD MOVIE
+  const hanldeAddMovie = () => {
+    const handleChange = (event) => {
+      let target = event.target;
+      if (target.name === "hinhAnh") {
+        setState({ ...state, hinhAnh: event.target.files[0] });
+        console.log(state);
+      } else {
+        setState({ ...state, [event.target.name]: event.target.value });
+      }
+    };
+
+    const createFromData = () => {
+      let form_data = new FormData();
+      for (let key in state) {
+        form_data.append(key, state[key]);
+      }
+      return axios({
+        url: "http://movie0706.cybersoft.edu.vn/api/quanlyphim/ThemPhimUploadHinh",
+        method: "POST",
+        data: form_data,
       })
-    }else{
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
+        .then((res) => {
+          console.log(res);
+          fetchMovieList();
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    };
 
-    }
-    
-  }
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      setSubmitted(true);
+      if (
+        state.tenPhim &&
+        state.trailer &&
+        state.hinhAnh.files &&
+        state.moTa &&
+        state.maNhom
+      ) {
+        setValid(true);
+      }
+      createFromData();
+    };
 
-  const handleRowAdd = (newData, resolve) => {
-    //validation
-    let errorList = []
-    if(newData.first_name === undefined){
-      errorList.push("Please enter first name")
-    }
-    if(newData.last_name === undefined){
-      errorList.push("Please enter last name")
-    }
-    if(newData.email === undefined || validateEmail(newData.email) === false){
-      errorList.push("Please enter a valid email")
-    }
+    console.log(submitted, state);
 
-    if(errorList.length < 1){ //no error
-      api.post("/users?page=2", newData)
-      .then(res => {
-        let dataToAdd = [...data];
-        dataToAdd.push(newData);
-        setData(dataToAdd);
-        resolve()
-        setErrorMessages([])
-        setIserror(false)
+    //Reset Form
+    const resetForm = () => {
+      setValid(false);
+      setSubmitted(false);
+      document.getElementById("form").reset();
+    };
+
+    return (
+      <div>
+        {/* Button trigger modal */}
+        {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#modelId">
+                Thêm Phim
+            </button> */}
+        {/* Modal */}
+
+        <div
+          style={{ marginTop: 70 }}
+          className="modal fade"
+          id="modelId"
+          tabIndex={-1}
+          aria-labelledby="modalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="modalLabel">
+                  Thêm Phim Mới
+                </h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <form id="form" onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    {submitted && valid ? (
+                      <div
+                        style={{
+                          backgroundColor: "green",
+                          color: "#fff",
+                          fontSize: 16,
+                        }}
+                      >
+                        Bạn đã thêm phim thành công!
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="form-group">
+                    <label>Tên phim</label>
+                    <input
+                      name="tenPhim"
+                      className="form-control"
+                      onChange={handleChange}
+                    />
+                    {submitted && !state.tenPhim ? (
+                      <span style={{ color: "red" }}>
+                        *Vui lòng điền Tên Phim
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="form-group">
+                    <label>Trailer</label>
+                    <input
+                      name="trailer"
+                      className="form-control"
+                      onChange={handleChange}
+                    />
+                    {submitted && !state.trailer ? (
+                      <span style={{ color: "red" }}>
+                        *Vui lòng điền Trailer
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="form-group">
+                    <label>Hình ảnh</label>
+                    <input
+                      type="file"
+                      name="hinhAnh"
+                      className="form-control"
+                      onChange={handleChange}
+                    />
+                    {submitted && !state.hinhAnh ? (
+                      <span style={{ color: "red" }}>
+                        *Vui lòng chọn Hình Ảnh
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="form-group">
+                    <label>Mô tả</label>
+                    <input
+                      name="moTa"
+                      className="form-control"
+                      onChange={handleChange}
+                    />
+                    {submitted && !state.moTa ? (
+                      <span style={{ color: "red" }}>*Vui lòng điển Mô Tả</span>
+                    ) : null}
+                  </div>
+                  <div className="form-group">
+                    <div>
+                      <label
+                        className="visually-hidden"
+                        htmlFor="specificSizeSelect"
+                      >
+                        Mã Nhóm
+                      </label>
+                      <select
+                        className="form-control"
+                        id="specificSizeSelect"
+                        name="maNhom"
+                        onChange={handleChange}
+                      >
+                        <option>Vui Lòng Chọn Mã Nhóm...</option>
+                        <option value="GP01">GP01</option>
+                        <option value="GP02">GP02</option>
+                        <option value="GP03">GP03</option>
+                        <option value="GP04">GP04</option>
+                        <option value="GP05">GP05</option>
+                        <option value="GP06">GP06</option>
+                        <option value="GP07">GP07</option>
+                        <option value="GP08">GP08</option>
+                        <option value="GP09">GP09</option>
+                        <option value="GP10">GP10</option>
+                        <option value="GP11">GP11</option>
+                        <option value="GP12">GP12</option>
+                        <option value="GP13">GP13</option>
+                        <option value="GP14">GP14</option>
+                        <option value="GP15">GP15</option>
+                      </select>
+                      {submitted && !state.maNhom ? (
+                        <span style={{ color: "red" }}>
+                          *Vui lòng chọn Mã Nhóm{" "}
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+                  <button type="submit" className="btn btn-primary">
+                    THÊM PHIM
+                  </button>
+                </form>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={resetForm}
+                >
+                  Cài lại
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Đóng
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  //DELETE MOVIE
+  const handleDeleteMovie = (maPhim) => {
+    axios({
+      url: `https://movie0706.cybersoft.edu.vn/api/QuanLyPhim/XoaPhim?MaPhim=${maPhim}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => {
+        console.log("xóa thành công");
+        fetchMovieList();
       })
-      .catch(error => {
-        setErrorMessages(["Cannot add data. Server error!"])
-        setIserror(true)
-        resolve()
-      })
-    }else{
-      setErrorMessages(errorList)
-      setIserror(true)
-      resolve()
-    }
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    
-  }
-
-  const handleRowDelete = (oldData, resolve) => {
-    
-    api.delete("/users?page=2/"+oldData.id)
-      .then(res => {
-        const dataDelete = [...data];
-        const index = oldData.tableData.id;
-        dataDelete.splice(index, 1);
-        setData([...dataDelete]);
-        resolve()
+  const renderMovieTable = () => {
+    return (
+      data &&
+      data.map((item, index) => {
+        return (
+          <tr key={index}>
+            <th scope="row">{index + 1}</th>
+            <td>{item.maPhim}</td>
+            <td>{item.tenPhim}</td>
+            <td>{item.biDanh}</td>
+            <td>
+              <img src={item.hinhAnh} style={{ width: 50 }} />
+            </td>
+            <td>{item.trailer}</td>
+            <td>{item.moTa}</td>
+            <td>{item.maNhom}</td>
+            <td>{item.ngayKhoiChieu}</td>
+            <td>{item.danhGia}</td>
+            <td style={{ display: "flex" }}>
+              <button className="btn btn-primary mr-1">
+                <AddBoxIcon />
+              </button>
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => {
+                  {
+                    handleDeleteMovie(item.maPhim);
+                  }
+                }}
+              >
+                <DeleteIcon />
+              </button>
+            </td>
+          </tr>
+        );
       })
-      .catch(error => {
-        setErrorMessages(["Delete failed! Server error"])
-        setIserror(true)
-        resolve()
-      })
-  }
-
+    );
+  };
 
   return (
-    <div style={{height:"80vh", width:"100%"}}>
-      
-      <Grid container spacing={1}>
-          <Grid item xs={3}></Grid>
-          <Grid item xs={6}>
-          <div>
-            {iserror && 
-              <Alert severity="error">
-                  {errorMessages.map((msg, i) => {
-                      return <div key={i}>{msg}</div>
-                  })}
-              </Alert>
-            }       
+    <div>
+      <div style={{ paddingTop: "70px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ justifyContent: "center", marginLeft: "20px" }}>
+            <h1>QUẢN LÝ PHIM</h1>
           </div>
-            <MaterialTable
-              title="User data from remote source"
-              columns={columns}
-              data={data}
-              icons={tableIcons}
-              editable={{
-                onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve) => {
-                      handleRowUpdate(newData, oldData, resolve);
-                      
-                  }),
-                onRowAdd: (newData) =>
-                  new Promise((resolve) => {
-                    handleRowAdd(newData, resolve)
-                  }),
-                onRowDelete: (oldData) =>
-                  new Promise((resolve) => {
-                    handleRowDelete(oldData, resolve)
-                  }),
-              }}
-            />
-          </Grid>
-          <Grid item xs={3}></Grid>
-        </Grid>
+          <div style={{ marginInlineStart: "auto" }}>
+            <span
+              style={{ width: "30px", cursor: "pointer" }}
+              data-toggle="modal"
+              data-target="#modelId"
+            >
+              <AddBoxIcon
+                style={{ color: "#3f51b5", fontSize: "30px" }}
+              ></AddBoxIcon>
+            </span>
+          </div>
+        </div>
+        <div>{hanldeAddMovie()}</div>
+      </div>
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">STT</th>
+            <th scope="col">Mã Phim</th>
+            <th scope="col">Tên Phim</th>
+            <th scope="col-1">Bí Danh</th>
+            <th scope="col">Hình Ảnh</th>
+            <th scope="col-2">Trailer</th>
+            <th scope="col-2">Mô Tả</th>
+            <th scope="col">Mã Nhóm</th>
+            <th scope="col">Ngày Khởi Chiếu</th>
+            <th scope="col">Đánh Giá</th>
+            <th scope="col">Hành Động</th>
+          </tr>
+        </thead>
+        <tbody>{renderMovieTable()}</tbody>
+      </table>
     </div>
   );
-}
+};
 
 export default MovieManagement;

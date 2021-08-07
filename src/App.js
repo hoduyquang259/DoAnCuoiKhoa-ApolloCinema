@@ -2,10 +2,10 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./styles/main.scss";
 import HomeTemplate from "./containers/HomeTemplate";
 import { routesAdmin, routesHome } from "./routes";
-import AuthPage from "./containers/Auth";
 import PageNotFound from "./containers/PageNotFound/PageNotFound";
 import AdminTemplate from "./containers/AdminTemplate";
 import Login from "./components/Login";
+import AuthPage from "./components/AdminComp/AuthPage";
 
 function App() {
   const renderRoutesHome = (routes) => {
@@ -41,7 +41,7 @@ function App() {
       <Switch>
         {renderRoutesHome(routesHome)}
         {renderRoutesAdmin(routesAdmin)}
-        <Route path="/auth/register" component={AuthPage} />
+        <Route path="/auth" component={AuthPage}/>
         <Route path="/auth/login" component={Login} />
         <Route path="*" component={PageNotFound} />
       </Switch>

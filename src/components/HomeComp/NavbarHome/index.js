@@ -54,7 +54,7 @@ const NavbarHome = () => {
             <Button
               className="btn-login"
               onClick={() => {
-                history.push("/login");
+                history.push("/auth");
               }}
             >
               Login
